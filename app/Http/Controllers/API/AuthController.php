@@ -15,7 +15,7 @@ class AuthController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'username' => 'required|unique:users,name',
-            'email' => 'required|unique:users,email',
+            'email' => 'required|email|unique:users,email',
             'password' => 'required'
         ]);
 
@@ -27,7 +27,7 @@ class AuthController extends Controller
             $user = User::create([
                 'name' => $request->username,
                 'email' => $request->email,
-                'password' => Hash::make($request->password)
+                'password' => Hash::make($request->password),
             ]);
 
             $token = $user->createToken($user->email . '+' . $user->name . 'REGTOKEN')->plainTextToken;
@@ -72,7 +72,8 @@ class AuthController extends Controller
                         'status' => 200,
                         'message' => 'Logged in!',
                         'user' => $user->name,
-                        'token' => $token
+                        'token' => $token,
+                        'role' => $user->role
                     ]
                 );
             }
