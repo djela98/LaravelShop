@@ -22,6 +22,11 @@ Route::post('login', [AuthController::class, 'login']);
 Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::post('sacuvaj-cokoladu', [CokoladaController::class, 'sacuvajCokoladu']);
+    Route::get('prikazi-cokolade', [CokoladaController::class, 'prikaziCokolade']);
+    Route::get('izmena-cokolade/{id}', [CokoladaController::class, 'izmenaCokolade']);
+    Route::post('sacuvaj-izmene/{id}', [CokoladaController::class, 'sacuvajIzmene']);
+
+
 
     Route::post('logout', [AuthController::class, 'logout']);
 });
