@@ -120,4 +120,51 @@ class CokoladaController extends Controller
             }
         }
     }
+
+    public function obrisiCokoladu($cokoladaID)
+    {
+        $cokolada = Cokolada::find($cokoladaID);
+
+        if ($cokolada) {
+            $cokolada->delete();
+            return response()->json(
+                [
+                    'status' => 200,
+                    'message' => 'Cokolada uspešno obrisana'
+                ]
+            );
+        } else {
+            return response()->json(
+                [
+                    'status' => 404,
+                    'message' => 'Greska'
+                ]
+            );
+        }
+    }
+
+
+    public function pretraziCokolade(Request $request)
+    {
+        $cokolade = Cokolada::where('naziv', 'like', "%$request->kriterijum%")->get();
+        if (count($cokolade) != 0) {
+            return response()->json([
+                'status' => 200,
+                'cokolade' => $cokolade
+            ]);
+        }
+    }
+
+    public function sortirajCokolade(Request $request)
+    {
+        if ($request->poredak == 'asc') {
+            $cokolade = Cokolada::orderBy($request->kriterijum)->get();
+        } else {
+            $cokolade = Cokolada::orderByDesc($request->kriterijum)->get();
+        }
+        return response()->json([
+            'status' => 200,
+            'cokolade' => $cokolade
+        ]);
+    }
 }
